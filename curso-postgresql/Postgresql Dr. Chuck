@@ -1,0 +1,41 @@
+DR. Chuck - Postgresql for everybody
+
+Arquitectura SQL
+
+Inicio Postgresql command line like SuperUser
+============================================= 
+sudo psql -h localhost -p 5432 -U postgres (password is postgres)
+\l --> lista todas las bases de datos.
+\q --> sale de la session actual.
+\dt --> muestra las tablas que posee la base de datos a la que se esta conectado.
+\d+ "nombre-de-la-tabla" --> muestra esquema y la estructura de la tabla indicada
+
+Creando un usuario y Base de datos
+==================================
+CREATE USER barcvilla WITH PASSWORD 'b4000$.';
+CREATE DATABASE people OWNER barcvilla ENCODING 'UTF-8';
+
+Conectarse a la base de datos people
+====================================
+psql people barcvilla
+
+Sentencias SQL
+==============
+INSERT INTO manufacturer (name, description) VALUES ('part 1', 'primer repuesto');
+UPDATE manufacturer SET description='Arandel 5/8' WHERE manufacturer_id=1;
+SELECT * FROM manufacturer WHERE manufacturer_id=1;
+DELETE FROM manufacturer WHERE manufacturer_id=1;
+SELECT * FROM manufacturer ORDER BY description;
+SELECT * FROM manufacturer ORDER BY description DESC;
+SELECT * FROM manufacturer WHERE name LIKE '%e%';
+
+/*LIMIT ->> Obtenemos las 2 primeras filas*/
+SELECT * FROM manufacturer ORDER BY name LIMIT 2;
+
+/*OFFSET ->> Saltamos n filas y Obtenemos las 2 primera filas. OFFSET empieza desde 0 */
+SELECT * FROM manufacturer ORDER BY name OFFSET 1 LIMIT 2;
+
+ALTER TABLE users ADD COLUMN id SERIAL;
+ALTER TABLE users ADD PRIMARY KEY(id);
+
+
