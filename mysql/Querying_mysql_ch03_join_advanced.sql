@@ -62,3 +62,11 @@ JOIN salesdetails SD ON ST.StockCode = SD.StockID
 JOIN salescategory CAT ON SD.SalePrice 
 BETWEEN CAT.LowerThreshold AND CAT.UpperThreshold
 ORDER BY MK.MakeName, MD.ModelName;
+
+// 7. Uniones Cruzadas
+SELECT CountryName, MakeName 
+-- primera tabla de la que deseo retornar todos los datos
+FROM country 
+-- CROSS JOIN / segunda tabla de la que deseo devolver todos los registros/
+CROSS JOIN make 
+ORDER BY CountryName, MakeName;

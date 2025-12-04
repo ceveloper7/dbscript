@@ -123,6 +123,24 @@ WHERE
         event_id <> 1;
 
 
+// Delete Sample -- nos permite hacer un rollback por medio de los archivos logs
+DELETE FROM ticket_sale_item WHERE category = 'C';
+
+// DELETE WITH NO WHERE CONDITION -- 
+DELETE FROM ticket_sale_item;
+ 
+// DELETE WITH TRUNCATE -- hace una eliminacion rapida y no hace revisiones
+TRUNCATE ticket_sale_item
+
+// OTHER CASES
+-- Eliminamos registros member con valores en el campo phone vacio
+DELETE FROM member WHERE phone = '';
+
+-- ELiminamos registros member con valores en el campo phone null
+DELETE FROM member WHERE phone IS NULL;
+
+-- Eliminamos registros member de ambos grupos empty y null
+DELETE FROM member WHERE phone = '' OR phone IS NULL;  
 
 
         
