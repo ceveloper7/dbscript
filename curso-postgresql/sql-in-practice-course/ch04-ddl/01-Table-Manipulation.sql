@@ -55,6 +55,26 @@ CREATE TABLE employee_bonus_payment(
         FOREIGN KEY(employee_id, bonus_year) REFERENCES employee_bonus(employee_id, bonus_year)
 );
 
+-- SERIAL general un numero entero 32 bits
+CREATE TABLE catalog (  
+    id SERIAL, 
+    name VARCHAR (100) NOT NULL, 
+    description TEXT NOT NULL,
+    category TEXT,
+    price NUMERIC(10, 2),
+    stock_quantity INT CHECK (stock_quantity >= 0),
+    PRIMARY KEY(id)
+);
+
+-- BIGSERIAL general un numero entero 64 bits
+CREATE TABLE reviews (  
+    id BIGSERIAL PRIMARY KEY,  
+    product_id INT,
+    customer_id INT,
+    review TEXT,
+    rank SMALLINT 
+);
+
 /* Consulta NULL or Empty values */
 // get employee where phone is null     
 SELECT * FROM employee where phone IS NULL;
@@ -113,6 +133,7 @@ ALTER TABLE employee_bonus ADD CONSTRAINT emplpyee_bonus_fkey1 FOREIGN KEY(emplo
 
 // Adding a check Constraint
 ALTER TABLE employee_bonus ADD CONSTRAINT employee_bonus_chk1 CHECK(currency = 'USD' OR currency = 'EUR');
+ALTER TABLE catalog ADD CONSTRAINT products_catalog_stock_check CHECK(category IN('coffee', 'mug', 't-shirt'));
 
 // deleting a CONSTRAINT
 ALTER TABLE employee_bonus DROP CONSTRAINT employee_bonus_chk1;
