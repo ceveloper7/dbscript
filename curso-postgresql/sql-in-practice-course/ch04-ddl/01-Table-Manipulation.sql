@@ -3,6 +3,12 @@
 // sudo psql -h localhost -p 5432 -U barcvilla -d playground
 
 
+// Ver la estructura de tabla
+\d+ [nombre de la tabla]
+
+// Consultar la estructura de una tabla 
+SELECT COLUMN_NAME, DATA_TYPE, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME ='products' ORDER BY ordinal_position;
+
 /* Creating table with Primary Key Constraint */
 //si establecemos a phone como UNIQUE dos filas con phone NULL se permitiran pero dos filas con phone empty no se permitiran
 // combiancion de columnas UNIQUE
@@ -74,6 +80,12 @@ CREATE TABLE reviews (
     review TEXT,
     rank SMALLINT 
 );
+
+// Crea una tabla basado en un conjunto de datos
+CREATE TABLE first_five_products AS (SELECT * FROM products LIMIT 5);
+
+// Otra forma de crear tablas similar a la anterior
+SELECT * INTO first_five_products FROM products LIMIT 5;
 
 /* Consulta NULL or Empty values */
 // get employee where phone is null     
