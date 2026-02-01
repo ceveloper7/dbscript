@@ -107,3 +107,75 @@ CREATE OR REPLACE TRIGGER  ticket_return_category_c
 BEFORE  UPDATE ON ticket_sale_item 
 FOR EACH ROW
 EXECUTE FUNCTION  check_category_c_return ();
+
+// After Desencadenante
+// Si un evento de cancela, todas la entradas vendidas (excepto categoria C) deben marcarse como devueltas
+// Se ejecuta Trigger luego de cada instruccion de actualizacion.
+CREATE OR REPLACE FUNCTION  return_cancelled_tickets () RETURNS TRIGGER AS $$
+BEGIN
+    -- NEW representa la fila actualizada de la tabla event
+    IF  NEW.is_cancelled = TRUE THEN
+        UPDATE ticket_sale_item 
+        SET is_returned = TRUE
+        WHERE event_id = NEW.id 
+          AND category <> 'C'; 
+    END IF;
+
+    RETURN  NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+// Definimos Trigger para la funcion return_canceled_tickets()
+CREATE TRIGGER  event_cancel_ticket_return
+AFTER  UPDATE ON event 
+FOR EACH ROW
+EXECUTE FUNCTION  return_cancelled_tickets ();
+
+
+// Working with Views
+CREATE VIEW 
+    event_theater AS
+SELECT 
+    event.id AS event_id,
+    event.name AS event_name,
+    event.gig_ts,
+    event.theater_id,
+    event.artist_id,
+    event.is_cancelled,
+    theater.name AS theater_name,
+    theater.capacity AS theater_capacity
+FROM
+    event
+    INNER JOIN  theater ON theater.id = event.theater_id; 
+
+
+
+// Calling a View
+SELECT * FROM event_theater;
+
+// INSTEAD OF INSERT, UPDATE, DELETE TRIGGER: Podemos anclar un INSTEAD OF trigger a una vista cuando se ejecuta 
+// Una sentencia DML
+
+// Este trigger sera llamado cuando se ejecuta un INSERT INTO en la Vista
+// 1. Create the Function
+CREATE OR REPLACE FUNCTION  insert_event_and_theater () RETURNS TRIGGER AS $$
+BEGIN
+    IF  NOT EXISTS  ( SELECT  id FROM theater WHERE id = NEW.theater_id ) THEN
+        INSERT  INTO theater(id, name, capacity)
+        VALUES (NEW.theater_id, NEW.theater_name, NEW.theater_capacity);
+    END IF;
+
+    INSERT INTO event(name, gig_ts, theater_id, artist_id, is_cancelled)
+    VALUES (NEW.event_name, NEW.gig_ts, NEW.theater_id, 
+            NEW.artist_id, NEW.is_cancelled);
+
+    RETURN  NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+// 2. Create the Trigger
+CREATE TRIGGER  event_theater_insert INSTEAD OF  INSERT  ON event_theater FOR EACH ROW
+EXECUTE FUNCTION  insert_event_and_theater (); 
+
+// 3. Test function and trigger
+
