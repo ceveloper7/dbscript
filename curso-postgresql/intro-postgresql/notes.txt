@@ -1,0 +1,19 @@
+Verificar status postgresql -> sudo systemctl status postgresql
+Iniciar postgresql -> sudo systemctl start postgresql
+
+Conectarse como user postgres -> psql -h localhost -U postgres -p 5432
+Crear user como superuser -> CREATE USER barcvilla WITH PASSWORD 'b4000$.' SUPERUSER;
+Crear base de datos -> CREATE DATABASE mydb OWNER barcvilla;
+Conectarse user a base de datos -> psql -h localhost -U barcvilla -p 5432 -d mydb
+
+PostgreSQL Tool:
+
+pqsl -? -> muestra la ayuda para psql
+
+Conectarse y ejecutar una sentencia -> psql -h localhost -p 5432 -U adempiere -d idempiere -c 'SELECT * FROM ad_user'
+
+\dt -> muestra las tablas
+\dv -> muestra las views
+\df -> muestra las funciones
+\du -> muestra los roles
+\? -> muestra todos los comando que se pueden aplicar
