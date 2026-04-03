@@ -1,0 +1,12 @@
+Mysql User: barcvilla
+Mysql pass: b4000$
+
+Crear user ->  mysql -u root -proot -e "CREATE USER IF NOT EXISTS 'barcvilla'@'%' IDENTIFIED BY 'b4000\$'; GRANT ALL PRIVILEGES ON *.* TO 'barcvilla'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+
+Conectar user root -> mysql -u root -p
+
+Crear Base de datos -> CREATE DATABASE [name];
+Mostrar Bases de datos -> SHOW DATABASES;
+Selecciona un BD -> USE [db name];
+
+
